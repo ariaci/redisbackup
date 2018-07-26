@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# redisbackup v1.0
+# redisbackup v1.1
 #
 # Copyright 2017 Patrick Morgenstern (ariaci)
 #
@@ -206,7 +206,11 @@ done
 if [ -z $rediscli_c ] ; then error "redis-cli command not found."; else info "redis-cli command found" ; fi
 
 # Listing all the databases individually, and dumping them
-databases=$(ls $($rediscli_c -u redis://$pw@$server:$port CONFIG GET DIR|tail -1)/*.rdb)
+if [ -z $pw ] ; then
+  databases=$(ls $($rediscli_c -u redis://$server:$port CONFIG GET DIR|tail -1)/*.rdb)
+else
+  databases=$(ls $($rediscli_c -u redis://$pw@$server:$port CONFIG GET DIR|tail -1)/*.rdb)
+fi
 if [ $? != 0 ] ; then error "cannot list databases, is server, port and password correct?" ; fi
 
 # Delete old daily backups
@@ -229,7 +233,11 @@ if [ $? != 0 ] ; then error "erasing old monthly backups" ; fi
 
 # Save current state and all pending changes of all databases
 info "Syncing current state and all pending changes of all Redis databases to disk"
-$rediscli_c -u redis://$pw@$server:$port SAVE
+if [ -z $pw ] ; then
+  $rediscli_c -u redis://$server:$port SAVE
+else
+  $rediscli_c -u redis://$pw@$server:$port SAVE
+fi
 if [ $? != 0 ] ; then error "cannot sync state and databases to disk, is server, port and password correct?" ; fi
 
 info "Backing up current databases to $bkup_p/redis"

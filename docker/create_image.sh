@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Part of redisbackup v1.0
+# Part of redisbackup v1.1
 #
 # Copyright 2018 Patrick Morgenstern (ariaci)
 #
