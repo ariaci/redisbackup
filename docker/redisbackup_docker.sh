@@ -19,4 +19,4 @@
 # Script to initiate backup of redis-databases using redisbackup-docker image
 #
 
-docker run -t -v=$1:/data:ro -v=$2:/backup:rw --link=$3:redissrv --rm $4
+docker run -t --network=db-net -v=$1:/data:ro -v=$2:/backup:rw --rm $4

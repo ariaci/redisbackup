@@ -37,8 +37,8 @@ cp "$2" ./tmp/redisbackup.conf
 
 echo "share=/backup" >>./tmp/redisbackup.conf
 echo "sharetype=filesystem" >>./tmp/redisbackup.conf
-echo "server=redissrv" >>./tmp/redisbackup.conf
+echo "server=redis" >>./tmp/redisbackup.conf
 
-docker build -t "$1" .
+docker build --rm --force-rm -t "$1" .
 
 rm -rf ./tmp
